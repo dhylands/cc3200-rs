@@ -6,10 +6,13 @@ MEMORY
   RAM   : ORIGIN = 0x20004000, LENGTH = 240K
 }
 
+ENTRY(isr_reset)
+
 SECTIONS
 {
   .vector_table :
   {
+    _stack_ptr = .;
     LONG(_estack)
     KEEP(*(.reset))
   } > RAM

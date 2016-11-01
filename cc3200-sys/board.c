@@ -30,6 +30,13 @@ void start(void);
 __attribute__((naked))
 void isr_reset(void)
 {
+    // Load the initial stack pointer. This is normally done by the bootloader,
+    // but if we're being run from gdb then we need to do it ourselves.
+
+    __asm("    ldr r0, =_stack_ptr\n"
+          "    ldr r1, [r0]\n"
+          "    mov sp, r1");
+
     // On the cc3200 there is no internal flash, so we don't need to copy
     // initialized data from ROM into RAM, the bootloader does it for us
     // when it loads the program into RAM.
