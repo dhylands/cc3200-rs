@@ -113,7 +113,7 @@ impl TMP006 {
 
 impl TemperatureSensor for TMP006 {
     fn get_temperature(&self) -> Option<f64> {
-        debug!("TMP006::get_temperature start");
+        //debug!("TMP006::get_temperature start");
         if let Ok(vobject) = self.sensor.get_register_value(TMP006_VOBJECT_REG_ADDR) {
             if let Ok(ambient_temp) = self.sensor.get_register_value(TMP006_TAMBIENT_REG_ADDR) {
                 /*return Some(TMP006::compute_temp((vobject as f64) * 156.25e-9,

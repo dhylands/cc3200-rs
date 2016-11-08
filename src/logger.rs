@@ -4,7 +4,7 @@
 
 // A simple logger that sets the max log level to Trace in debug builds and to Info in release ones.
 
-use log::{self, LogRecord, LogLevelFilter, LogMetadata, SetLoggerError};
+//use log::{self, LogRecord, LogLevelFilter, LogMetadata, SetLoggerError};
 
 #[macro_export]
 macro_rules! print {
@@ -24,6 +24,7 @@ macro_rules! println {
     ($fmt:expr, $($args:tt)*) => ( print!(concat!($fmt, '\n'), $($args)*) );
 }
 
+/*
 pub struct SimpleLogger;
 
 #[cfg(debug_assertions)]
@@ -59,3 +60,4 @@ impl SimpleLogger {
         }
     }
 }
+*/

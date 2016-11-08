@@ -52,6 +52,12 @@ void reset(void)
     PRCMMCUReset(1);
 }
 
+void breakpoint(void) {
+}
+
+extern uint32_t _stack_guard;
+extern uint32_t _estack_guard;
+
 __attribute__((naked))
 void isr_reset(void)
 {
@@ -78,6 +84,9 @@ void isr_reset(void)
           "    it      lt\n"
           "    strlt   r2, [r0], #4\n"
           "    blt     zero_loop");
+
+    _stack_guard = 0xaaaaaaaa;
+    _estack_guard = 0xaaaaaaaa;
 
     //
     // Call the application's entry point.

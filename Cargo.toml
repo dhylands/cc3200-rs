@@ -13,8 +13,9 @@ name = "cc3200"
 [dependencies]
 cc3200-sys = { path = "cc3200-sys" }
 freertos_alloc = { path = "freertos_alloc" }
-freertos_rs = "0.1"
-log = { version = "0.3", default-features = false }
+#freertos_rs = "0.1"
+freertos_rs = { path = "../freertos.rs" }
+#log = { version = "0.3", default-features = false }
 
 [profile.dev]
 panic = "abort"

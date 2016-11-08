@@ -14,8 +14,8 @@
 //extern crate compiler_builtins;
 
 extern crate cc3200_sys;
-#[macro_use]
-extern crate log;
+//#[macro_use]
+//extern crate log;
 
 #[macro_use]
 pub mod logger;

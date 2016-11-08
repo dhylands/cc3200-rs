@@ -36,9 +36,13 @@ SECTIONS
   .bss :
   {
       _bss = .;
+      _stack_guard = .;
+      LONG(0xAAAAAAAA);
       _stack = .;
       . = . + 2048;
       _estack = .;
+      _estack_guard = .;
+      LONG(0xAAAAAAAA);
       *(.bss*)
       *(COMMON)
       _ebss = .;

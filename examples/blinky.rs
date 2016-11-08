@@ -15,8 +15,8 @@ extern crate cc3200;
 extern crate alloc;
 extern crate freertos_rs;
 extern crate freertos_alloc;
-#[macro_use]
-extern crate log;
+//#[macro_use]
+//extern crate log;
 
 use cc3200::cc3200::{Board, Console, Utils, LedEnum, LedName};
 
@@ -24,6 +24,20 @@ use alloc::arc::Arc;
 use freertos_rs::{CurrentTask, Duration, Task, Queue};
 
 static VERSION: &'static str = "1.0";
+
+ extern "C" {
+        pub fn console_putchar(char: i8);
+}
+
+fn puts(s: &str) {
+    for ch in s.chars() {
+        unsafe {
+            console_putchar(ch as i8);
+        }
+    }
+}
+
+
 
 // Conceptually, this is our program "entry point". It's the first thing the microcontroller will
 // execute when it (re)boots. (As far as the linker is concerned the entry point must be named
@@ -37,10 +51,12 @@ pub fn start() -> ! {
 
     Board::init();
 
-    info!("Welcome to CC3200 blinking leds version {}", VERSION);
+    println!("Welcome to CC3200 blinking leds version {}", VERSION);
+    puts("Testing\n");
 
     Board::test();
 
+    /*
     let queue = Arc::new(Queue::new(10).unwrap());
     let _producer = {
         let queue = queue.clone();
@@ -73,11 +89,15 @@ pub fn start() -> ! {
             })
             .unwrap()
     };
+    */
 
     let _blinky = {
-        Task::new()
-            .name("blinky")
-            .start(|| {
+        puts("About to call Task::new\n");
+
+        let mut t1 = Task::new();
+        let t2 = t1.name("blinky");
+        let t3 = t2.start(|| {
+                puts("blinky thread started");
                 Board::led_configure(&[LedEnum::LED1, LedEnum::LED2, LedEnum::LED3]);
                 Board::led_off(LedName::MCU_ALL_LED_IND);
                 let mut counter = 0;
@@ -103,10 +123,12 @@ pub fn start() -> ! {
 
                     counter += 1;
                 }
-            })
+            });
+        t3
             .unwrap()
     };
 
+    puts("About to start scheduler");
     Board::start_scheduler();
 
     // The only reason start_scheduler should fail is if there wasn't enough

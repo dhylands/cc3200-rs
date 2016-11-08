@@ -78,6 +78,8 @@ task.h is included from an application file. */
 #include "timers.h"
 #include "StackMacros.h"
 
+int console_printf(const char*fmt, ...);
+
 /* Lint e961 and e750 are suppressed as a MISRA exception justified because the
 MPU ports require MPU_WRAPPERS_INCLUDED_FROM_API_FILE to be defined for the
 header files above, but not in this file, in order to generate the correct
@@ -517,12 +519,16 @@ BaseType_t xTaskGenericCreate( TaskFunction_t pxTaskCode, const char * const pcN
 BaseType_t xReturn;
 TCB_t * pxNewTCB;
 
+	console_printf("xTaskGenericCreate\n");
+
 	configASSERT( pxTaskCode );
 	configASSERT( ( ( uxPriority & ( ~portPRIVILEGE_BIT ) ) < configMAX_PRIORITIES ) );
 
 	/* Allocate the memory required by the TCB and stack for the new task,
 	checking that the allocation was successful. */
+	console_printf("About to call prvAllocateTCBAndStack\n");
 	pxNewTCB = prvAllocateTCBAndStack( usStackDepth, puxStackBuffer );
+	console_printf("Back from prvAllocateTCBAndStack\n");
 
 	if( pxNewTCB != NULL )
 	{
@@ -569,7 +575,9 @@ TCB_t * pxNewTCB;
 		#endif /* portSTACK_GROWTH */
 
 		/* Setup the newly allocated TCB with the initial state of the task. */
+		console_printf("About to call prvInitialiseTCBVariables\n");
 		prvInitialiseTCBVariables( pxNewTCB, pcName, uxPriority, xRegions, usStackDepth );
+		console_printf("Back from prvInitialiseTCBVariables\n");
 
 		/* Initialize the TCB stack to look as if the task was already running,
 		but had been interrupted by the scheduler.  The return address is set
@@ -581,7 +589,9 @@ TCB_t * pxNewTCB;
 		}
 		#else /* portUSING_MPU_WRAPPERS */
 		{
+			console_printf("About to call pxPortInitialiseStack\n");
 			pxNewTCB->pxTopOfStack = pxPortInitialiseStack( pxTopOfStack, pxTaskCode, pvParameters );
+			console_printf("Back from pxPortInitialiseStack\n");
 		}
 		#endif /* portUSING_MPU_WRAPPERS */
 
@@ -686,6 +696,7 @@ TCB_t * pxNewTCB;
 		}
 	}
 
+	console_printf("xTaskGenericCreate returning xReturn: %d\n", xReturn);
 	return xReturn;
 }
 /*-----------------------------------------------------------*/
