@@ -18,7 +18,9 @@ for example_file in examples/*.rs; do
     example=$(basename ${example_file/.rs/})
     if [ "${example}" != "config" ]; then
         ./build.sh --example ${example}
+	echo "build.sh returned $?"
         ./build.sh --example ${example} --release
+	echo "build.sh returned $?"
     fi
 done
 

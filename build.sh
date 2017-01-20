@@ -9,3 +9,4 @@ set -x
 xargo build --target=${TARGET} ${ARGS} ${EXAMPLE_ARG} && \
 arm-none-eabi-size ${FIRMWARE_ELF} && \
 arm-none-eabi-objcopy -O binary ${FIRMWARE_ELF} ${FIRMWARE_BIN}
+echo "xargo exited with $?"
